@@ -1,3 +1,22 @@
+# Python
+__pycache__/
+*.pyc
+.env
+.venv
+venv/
+env/
+
+# VS Code
+.vscode/
+
+# Azure Functions
+local.settings.json
+.funcignore
+
+# Operating System Files
+.DS_Store
+Thumbs.db
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
