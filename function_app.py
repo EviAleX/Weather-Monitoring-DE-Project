@@ -81,58 +81,57 @@ def weatherapifunction(myTimer: func.TimerRequest) -> None:
         location_data = current_weather.get("location", {})
         current = current_weather.get("current", {})
         condition = current.get("condition", {})
-        air_quality = current_weather.get("air_quality", {})
-        forecast = forecast_weather.get("forecast", {}).get("forecastday", [])
-        alerts_list = alerts.get("alerts", {}).get("alert", [])
+        air_quality = current.get("air_quality", {})
+        forecast_list = forecast_weather.get("forecast", {}).get("forecastday", []) if forecast_weather else []
+        alert_list = alerts.get("alerts", {}).get("alert", []) if alerts else []
+
+        # Get the first alert and forecast, if they exist
+        first_alert = alert_list[0] if alert_list else {}
+        first_forecast = forecast_list[0] if forecast_list else {}
+        first_forecast_day = first_forecast.get('day', {})
+        first_forecast_condition = first_forecast_day.get('condition', {})
 
         flattened_data = {
-            "name": location_data.get("name"),
-            "region": location_data.get("region"),
-            "country": location_data.get("country"),
-            "lat": location_data.get("lat"),
-            "lon": location_data.get("lon"),
-            "localtime": location_data.get("localtime"),
-            "temp_c": current.get("temp_c"),
-            "is_day": current.get("is_day"),
-            "condition_text": condition.get("text"),
-            "condition_icon": condition.get("icon"),
-            "wind_kph": current.get("wind_kph"),
-            "wind_degree": current.get("wind_degree"),
-            "wind_dir": current.get("wind_dir"),
-            "pressure_in": current.get("pressure_in"),
-            "precip_in": current.get("precip_in"),
-            "humidity": current.get("humidity"),
-            "cloud": current.get("cloud"),
-            "feelslike_c": current.get("feelslike_c"),
-            "uv": current.get("uv"),
-            "air_quality": {
-                "co": air_quality.get("co"),
-                "no2": air_quality.get("no2"),
-                "o3": air_quality.get("o3"),
-                "so2": air_quality.get("so2"),
-                "pm2_5": air_quality.get("pm2_5"),
-                "pm10": air_quality.get("pm10"),
-                "us-epa-index": air_quality.get("us-epa-index"),
-                "gb-defra-index": air_quality.get("gb-defra-index")
-            },
-            "alerts": [
-                {
-                    "headline": alert.get("headline"),
-                    "severity": alert.get("severity"),
-                    "description": alert.get("desc"),
-                    "instruction": alert.get("instruction")
-                }
-                for alert in alerts_list
-            ],
-            'forecast': [
-                {
-                    'date': day.get('date'),
-                    'maxtemp_c': day.get('day', {}).get('maxtemp_c'),
-                    'mintemp_c': day.get('day', {}).get('mintemp_c'),
-                    'condition': day.get('day', {}).get('condition', {}).get('text')
-                }
-                for day in forecast
-            ]
+            'name': location_data.get('name'),
+            'region': location_data.get('region'),
+            'country': location_data.get('country'),
+            'lat': location_data.get('lat'),
+            'lon': location_data.get('lon'),
+            'localtime': location_data.get('localtime'),
+            'temp_c': current.get('temp_c'),
+            'is_day': current.get('is_day'),
+            'condition_text': condition.get('text'),
+            'condition_icon': condition.get('icon'),
+            'wind_kph': current.get('wind_kph'),
+            'wind_degree': current.get('wind_degree'),
+            'wind_dir': current.get('wind_dir'),
+            'pressure_in': current.get('pressure_in'),
+            'precip_in': current.get('precip_in'),
+            'humidity': current.get('humidity'),
+            'cloud': current.get('cloud'),
+            'feelslike_c': current.get('feelslike_c'),
+            'uv': current.get('uv'),
+            # Flatten air quality and fix invalid names
+            'aq_co': air_quality.get('co'),
+            'aq_no2': air_quality.get('no2'),
+            'aq_o3': air_quality.get('o3'),
+            'aq_so2': air_quality.get('so2'),
+            'aq_pm2_5': air_quality.get('pm2_5'),
+            'aq_pm10': air_quality.get('pm10'),
+            'aq_us_epa_index': air_quality.get('us-epa-index'),
+            'aq_gb_defra_index': air_quality.get('gb-defra-index'),
+            
+            # Add alert fields as single columns
+            'alert_headline': first_alert.get('headline'),
+            'alert_severity': first_alert.get('severity'),
+            'alert_description': first_alert.get('desc'),
+            'alert_instruction': first_alert.get('instruction'),
+
+            # Add forecast fields as single columns
+            'forecast_date': first_forecast.get('date'),
+            'forecast_maxtemp_c': first_forecast_day.get('maxtemp_c'),
+            'forecast_mintemp_c': first_forecast_day.get('mintemp_c'),
+            'forecast_condition': first_forecast_condition.get('text')
         }
         return flattened_data
 
