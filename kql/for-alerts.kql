@@ -1,0 +1,17 @@
+//***********************************************************************************************************
+// Here are two articles to help you get started with KQL:
+// KQL reference guide - https://aka.ms/KQLguide
+// SQL - KQL conversions - https://aka.ms/sqlcheatsheet
+//***********************************************************************************************************
+
+['weather-table']
+| where alert_headline != "" // Filter the records where an alert condition exists
+| extend AlertValue = tostring(alert_description) // Extract alerts as string
+| summarize LastTriggered = max(EventEnqueuedUtcTime) by AlertValue
+| join kind=leftanti (
+    ['weather-table']
+    | where alert_headline != "" 
+    | extend AlertValue = tostring(alert_description) // Extract alerts as string
+    | summarize LastTriggered = max(EventEnqueuedUtcTime) by AlertValue
+    | where LastTriggered < ago(1m)
+) on AlertValue
