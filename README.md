@@ -2,7 +2,7 @@
 
 This project demonstrates an end-to-end, real-time data engineering solution built on Microsoft Azure and Fabric. The pipeline ingests live weather data from an external API, processes it in real-time, and visualizes the insights through interactive Power BI dashboards.
 
-![Archicture diagram](.images/architecture.png)
+![Archicture diagram](images/architecture.png)
 ---
 ## 🏛️**Architecture Overview**
 
