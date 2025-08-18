@@ -61,7 +61,7 @@ The data flows through the system in four key stages:
 - **PowerBI** connects directly to the KQL Database in DirectQuery mode.
 - This allows for the creation of powerful, interactive dashboards that visualise the weather data in near real-time providing stakeholders with up-to-the-second insights.
 
-<img width="1919" height="1115" alt="image" src="https://github.com/user-attachments/assets/0482ede8-03ec-4ce4-a00b-7d938a644d2f" />
+<img width="1919" height="1114" alt="image" src="https://github.com/user-attachments/assets/1ada78dd-85b7-4efb-ae8b-5b18bb682351" />
 
 ---
 
